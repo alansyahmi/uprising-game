@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://b7v12yhm3pqr4"]
+
+[ext_resource type="Script" path="res://src/entities/enemies/TrainingDummy.gd" id="1_dummy"]
+[ext_resource type="Script" path="res://src/combat/Hitbox3D.gd" id="2_hitbox"]
+[ext_resource type="Script" path="res://src/combat/Hurtbox3D.gd" id="3_hurtbox"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_root"]
+radius = 0.5
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.55, 0.22, 0.22, 1)
+roughness = 0.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.5
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_visor"]
+albedo_color = Color(0.8, 0.7, 0.2, 1)
+emission_enabled = true
+emission = Color(0.9, 0.8, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_visor"]
+material = SubResource("StandardMaterial3D_visor")
+size = Vector3(0.5, 0.15, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_telegraph"]
+transparency = 1
+albedo_color = Color(1, 0.1, 0.1, 0.45)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_telegraph"]
+material = SubResource("StandardMaterial3D_telegraph")
+top_radius = 1.4
+bottom_radius = 1.4
+height = 0.05
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(1.2, 1.2, 2.0)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurtbox"]
+radius = 0.55
+height = 2.1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_billboard"]
+viewport_path = NodePath("SubViewport")
+
+[node name="TrainingDummy" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_dummy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+shape = SubResource("CapsuleShape3D_root")
+
+[node name="ModelHolder" type="Node3D" parent="."]
+
+[node name="BodyMesh" type="MeshInstance3D" parent="ModelHolder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="VisorMesh" type="MeshInstance3D" parent="ModelHolder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.35)
+mesh = SubResource("BoxMesh_visor")
+
+[node name="TelegraphMarker" type="MeshInstance3D" parent="ModelHolder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -1.0)
+mesh = SubResource("CylinderMesh_telegraph")
+
+[node name="EnemyHitbox" type="Area3D" parent="ModelHolder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -1.0)
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ModelHolder/EnemyHitbox"]
+shape = SubResource("BoxShape3D_hitbox")
+
+[node name="Hurtbox3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("3_hurtbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox3D"]
+shape = SubResource("CapsuleShape3D_hurtbox")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(160, 40)
+
+[node name="BillboardUI" type="VBoxContainer" parent="SubViewport"]
+offset_right = 160.0
+offset_bottom = 40.0
+theme_override_constants/separation = 4
+
+[node name="HPBar" type="ProgressBar" parent="SubViewport/BillboardUI"]
+custom_minimum_size = Vector2(160, 14)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="PostureBar" type="ProgressBar" parent="SubViewport/BillboardUI"]
+custom_minimum_size = Vector2(160, 8)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_billboard")
