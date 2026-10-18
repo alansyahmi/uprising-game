@@ -1,2 +1,3 @@
-res://src/levels/test_arena/TestArena.tscn
-res://src/ui/CombatHUD.gd
+res://src/core/IsoCamera3D.gd
+res://src/entities/enemies/TrainingDummy.gd
+res://src/entities/player/Player.gd

@@ -24,6 +24,7 @@ var is_winding_up: bool = false
 var original_mat: StandardMaterial3D
 
 func _ready() -> void:
+	add_to_group("enemies")
 	current_health = max_health
 	current_posture = max_posture
 	if enemy_hitbox:

@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src/core/IsoCamera3D.gd" id="2_camera"]
 [ext_resource type="PackedScene" path="res://src/entities/enemies/TrainingDummy.tscn" id="3_dummy"]
 [ext_resource type="PackedScene" path="res://src/ui/CombatHUD.tscn" id="4_hud"]
+[ext_resource type="Shader" path="res://src/levels/test_arena/floor_tiles.gdshader" id="5_tiles"]
 
 [sub_resource type="Environment" id="Environment_arena"]
 background_mode = 1
@@ -19,20 +20,19 @@ glow_bloom = 0.15
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(36, 1, 36)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.12, 0.13, 0.17, 1)
-metallic = 0.1
-roughness = 0.8
-uv1_scale = Vector3(18, 18, 18)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_floor"]
+render_priority = 0
+shader = ExtResource("5_tiles")
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
-material = SubResource("StandardMaterial3D_floor")
+material = SubResource("ShaderMaterial_floor")
 size = Vector3(36, 1, 36)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
 size = Vector3(36, 4, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pillar"]
+transparency = 1
 albedo_color = Color(0.22, 0.24, 0.3, 1)
 roughness = 0.7
 

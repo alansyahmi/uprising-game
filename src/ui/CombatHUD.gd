@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var health_label: Label = $MarginContainer/VBoxContainer/TopBar/HealthLabel
 @onready var dash_bar: ProgressBar = $MarginContainer/VBoxContainer/TopBar/DashBar
 @onready var announcement_label: Label = $AnnouncementLabel
-@onready var combo_label: Label = $MarginContainer/VBoxContainer/BottomBar/ComboLabel
+@onready var combo_label: Label = $MarginContainer/VBoxContainer/BottomBar/WeaponInfo/ComboLabel
 
 var announcement_tween: Tween
 

@@ -38,6 +38,10 @@ var parry_cooldown_timer: float = 0.0
 @onready var rapier_mesh: Node3D = $ModelHolder/Rapier
 @onready var rapier_hitbox: Hitbox3D = $ModelHolder/Rapier/Hitbox3D
 @onready var hurtbox: Hurtbox3D = $Hurtbox3D
+@onready var character_sprite: Sprite3D = $ModelHolder/CharacterSprite
+
+var texture_front: Texture2D = preload("res://src/entities/player/textures/player_front.png")
+var texture_back: Texture2D = preload("res://src/entities/player/textures/player_back.png")
 
 var rapier_rest_pos: Vector3 = Vector3(0.4, 0.2, -0.6)
 var rapier_rest_rot: Vector3 = Vector3.ZERO
@@ -95,16 +99,38 @@ func _update_mouse_aim() -> void:
 		var flat_target = Vector3(look_target.x, global_position.y, look_target.z)
 		if flat_target.distance_to(global_position) > 0.2:
 			model_holder.look_at(flat_target, Vector3.UP)
+			
+	# Update 2.5D directional sprite (Front vs Back based on camera orientation)
+	if character_sprite:
+		var facing = -model_holder.global_transform.basis.z
+		var cam_forward = -cam.global_transform.basis.z
+		if facing.dot(cam_forward) > 0.1:
+			if character_sprite.texture != texture_back:
+				character_sprite.texture = texture_back
+		elif facing.dot(cam_forward) < -0.1:
+			if character_sprite.texture != texture_front:
+				character_sprite.texture = texture_front
 
 func _handle_movement(_delta: float) -> void:
 	if is_dashing:
 		velocity = dash_direction * dash_speed
 		return
 	
-	# WASD Input
+	# WASD Input (Screen-space camera relative)
 	var move_x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	var move_z = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-	input_dir = Vector3(move_x, 0.0, move_z).normalized()
+	
+	var cam := get_viewport().get_camera_3d()
+	if cam:
+		var cam_forward = -cam.global_transform.basis.z
+		cam_forward.y = 0.0
+		cam_forward = cam_forward.normalized()
+		var cam_right = cam.global_transform.basis.x
+		cam_right.y = 0.0
+		cam_right = cam_right.normalized()
+		input_dir = (cam_right * move_x + cam_forward * (-move_z)).normalized()
+	else:
+		input_dir = Vector3(move_x, 0.0, move_z).normalized()
 	
 	if is_attacking or is_parrying:
 		# Reduced movement during attack/parry

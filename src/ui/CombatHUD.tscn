@@ -113,7 +113,7 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 12
-text = "[W/A/S/D] MOVE   [MOUSE] AIM
+text = "[W/A/S/D] MOVE   [MOUSE] AIM   [C] TOGGLE POV (HADES / MLBB)
 [LMB] RAPIER 3-HIT COMBO (DASH-CANCELABLE)
 [RMB] DEFENSIVE PARRY (SHATTERS POSTURE)
 [SPACE] CELLULAR DASH (ZZZ PERFECT DODGE)"
