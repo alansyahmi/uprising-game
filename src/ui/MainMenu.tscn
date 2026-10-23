@@ -1,0 +1,208 @@
+[gd_scene format=3 uid="uid://d1g5m7h8e4kmq"]
+
+[ext_resource type="Script" path="res://src/ui/MainMenu.gd" id="1_menu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.18, 0.07, 0.09, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.2, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.32, 0.1, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.35, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sec_normal"]
+bg_color = Color(0.12, 0.13, 0.16, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.44, 0.52, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sec_hover"]
+bg_color = Color(0.2, 0.22, 0.27, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.7, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+bg_color = Color(0.08, 0.08, 0.11, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.2, 0.25, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.045, 0.06, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="TitleBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.15, 0.22, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 52
+text = "UPRISING: THE BLOOD SACRAMENT"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CenterContainer/VBoxContainer/TitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.7, 0.5, 1)
+theme_override_font_sizes/font_size = 18
+text = "CYBERPUNK BLOODBORNE MEETS TACTICAL MOBA"
+horizontal_alignment = 1
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonsVBox"]
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+text = "▶  START STAGE 1"
+
+[node name="ControlsButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonsVBox"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.96, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sec_normal")
+text = "⚙  HOW TO PLAY"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonsVBox"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sec_normal")
+text = "✕  EXIT GAME"
+
+[node name="ControlsModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -180.0
+offset_right = 260.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="Margin" type="MarginContainer" parent="ControlsModal"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="ControlsModal/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ModalTitle" type="Label" parent="ControlsModal/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "CONTROLS & COMBAT SYSTEMS"
+horizontal_alignment = 1
+
+[node name="ModalText" type="Label" parent="ControlsModal/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.87, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "• [W / A / S / D]  Move Character
+• [LMB / J]  3-Hit Rapier Combo (Dash-Cancelable)
+• [RMB / K]  Defensive Parry (Breaks Enemy Posture)
+• [SPACE / SHIFT]  Cellular Dash (ZZZ Perfect Dodge)
+• [C]  Toggle Camera POV (Hades 45° vs MLBB Tactical MOBA)
+
+STAGE OBJECTIVES:
+1. Purge all 12 Hostiles
+2. Die no more than 1 time
+3. Die no more than 2 times
+(Stage ends in Defeat if character dies 3 times!)"
+
+[node name="CloseButton" type="Button" parent="ControlsModal/Margin/VBox"]
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sec_normal")
+text = "CLOSE"

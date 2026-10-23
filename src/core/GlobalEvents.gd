@@ -10,6 +10,17 @@ signal enemy_staggered(enemy: Node3D)
 signal player_health_changed(current_hp: float, max_hp: float)
 signal player_dash_cooldown_updated(current: float, max_cd: float)
 
+# Stage lifecycle, criteria, and defeat signals
+signal stage_intro_started()
+signal stage_intro_completed()
+signal enemy_killed(enemy: Node3D)
+signal enemy_count_updated(current_killed: int, total_enemies: int)
+signal player_death_occurred(current_deaths: int, max_deaths: int)
+signal player_respawned()
+signal stage_completed(all_enemies_cleared: bool, died_lte_1: bool, died_lte_2: bool, total_deaths: int)
+signal stage_failed(total_deaths: int)
+signal restart_stage_requested()
+
 func _ready() -> void:
 	_ensure_input_mappings()
 

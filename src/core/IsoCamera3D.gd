@@ -21,6 +21,13 @@ enum CameraProfile {
 @export var max_movement_lead: float = 2.2
 @export var lead_smooth_speed: float = 4.5
 
+@export_group("Stage Intro Cinematic")
+## Automatically plays the 3-second zoom-out intro on stage start
+@export var enable_stage_intro: bool = true
+@export var intro_duration: float = 3.0
+var is_intro_active: bool = false
+var _intro_tween: Tween = null
+
 @export_group("Mouse Lead (Optional)")
 ## When false, camera movement ignores mouse and tracks movement/velocity (mobile friendly)
 @export var enable_mouse_lead: bool = false
@@ -71,7 +78,55 @@ func _ready() -> void:
 	if HitStopManager:
 		HitStopManager.screen_shake_requested.connect(add_trauma)
 		
+	if GlobalEvents:
+		GlobalEvents.restart_stage_requested.connect(func(): start_stage_intro(intro_duration))
+		
 	call_deferred("_check_automated_capture")
+	if enable_stage_intro:
+		call_deferred("start_stage_intro", intro_duration)
+
+func start_stage_intro(duration: float = 3.0) -> void:
+	if not target:
+		return
+		
+	is_intro_active = true
+	GlobalEvents.stage_intro_started.emit()
+	
+	# Determine character's facing direction
+	var facing: Vector3 = Vector3(0.0, 0.0, -1.0)
+	if "model_holder" in target and target.model_holder:
+		facing = -target.model_holder.global_transform.basis.z.normalized()
+	elif target is Node3D:
+		facing = -target.global_transform.basis.z.normalized()
+	if facing.length() < 0.1:
+		facing = Vector3(0.0, 0.0, -1.0)
+	
+	# Half upper body framing:
+	# Upper torso / chest focus is at Y ≈ 1.25m
+	# Camera placed in front of upper torso (1.65m away, 1.35m height)
+	var intro_cam_offset = (facing * 1.65) + Vector3(0.0, 1.35, 0.0)
+	var intro_focus_offset = Vector3(0.0, 1.25, 0.0)
+	var intro_fov = 32.0
+	
+	current_offset = intro_cam_offset
+	current_focus = intro_focus_offset
+	fov = intro_fov
+	
+	global_position = target.global_position + current_offset
+	look_at(target.global_position + current_focus, Vector3.UP)
+	
+	if _intro_tween and _intro_tween.is_valid():
+		_intro_tween.kill()
+		
+	_intro_tween = create_tween().set_parallel(true)
+	_intro_tween.tween_property(self, "current_offset", camera_offset, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	_intro_tween.tween_property(self, "current_focus", focus_offset, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	_intro_tween.tween_property(self, "fov", target_fov, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	
+	_intro_tween.chain().tween_callback(func():
+		is_intro_active = false
+		GlobalEvents.stage_intro_completed.emit()
+	)
 
 func _check_automated_capture() -> void:
 	for arg in OS.get_cmdline_user_args():
@@ -147,6 +202,11 @@ func add_trauma(amount: float) -> void:
 
 func _process(delta: float) -> void:
 	if not target:
+		return
+		
+	if is_intro_active:
+		global_position = target.global_position + current_offset
+		look_at(target.global_position + current_focus, Vector3.UP)
 		return
 	
 	# Smoothly interpolate profile offsets and FOV

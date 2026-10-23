@@ -22,7 +22,67 @@ bg_color = Color(0.1, 0.1, 0.12, 0.6)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dash_fill"]
 bg_color = Color(0.15, 0.75, 0.95, 1)
 
-[node name="CombatHUD" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_dark"]
+bg_color = Color(0.07, 0.07, 0.09, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.32, 0.38, 0.6)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.18, 0.07, 0.09, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.2, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.32, 0.1, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.35, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sec_normal"]
+bg_color = Color(0.12, 0.13, 0.16, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.44, 0.52, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sec_hover"]
+bg_color = Color(0.2, 0.22, 0.27, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.7, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="CombatHUD" type="CanvasLayer" groups=["hud"]]
 script = ExtResource("1_hud")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -39,17 +99,20 @@ theme_override_constants/margin_bottom = 35
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="TopBar" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HeaderHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TopBar" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HeaderHBox"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Header" type="Label" parent="MarginContainer/VBoxContainer/TopBar"]
+[node name="Header" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/TopBar"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.7, 0.5, 1)
 theme_override_font_sizes/font_size = 14
 text = "PROTAGONIST // ANTOINE [THE FALCON // SEVERED SCION]"
 
-[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/TopBar"]
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HeaderHBox/TopBar"]
 custom_minimum_size = Vector2(340, 22)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -58,12 +121,12 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
 value = 100.0
 show_percentage = false
 
-[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar"]
+[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/TopBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "FLESH INTEGRITY: 100 / 100"
 
-[node name="DashBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/TopBar"]
+[node name="DashBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HeaderHBox/TopBar"]
 custom_minimum_size = Vector2(340, 8)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -72,6 +135,65 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_dash_fill")
 max_value = 0.8
 value = 0.8
 show_percentage = false
+
+[node name="TopSpacer" type="Control" parent="MarginContainer/VBoxContainer/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ObjectivesPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HeaderHBox"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_dark")
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="StageTitle" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.75, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "STAGE 01 // BLOOD SACRAMENT"
+
+[node name="EnemyCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "HOSTILES PURGED: 0 / 12"
+
+[node name="LivesLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.25, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "LIVES: ♥ ♥ ♥  (DEATHS: 0 / 3)"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Crit1Label" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "★ 1. Clear all 12 enemies [0/12]"
+
+[node name="Crit2Label" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "★ 2. Die no more than 1 time"
+
+[node name="Crit3Label" type="Label" parent="MarginContainer/VBoxContainer/HeaderHBox/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "★ 3. Die no more than 2 times"
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -124,9 +246,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
+offset_left = -300.0
 offset_top = -140.0
-offset_right = 250.0
+offset_right = 300.0
 offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -135,3 +257,263 @@ theme_override_font_sizes/font_size = 26
 text = "✦ PERFECT DODGE ✦"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="IntroBanner" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -350.0
+offset_top = 60.0
+offset_right = 350.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_constants/separation = 6
+
+[node name="IntroTitle" type="Label" parent="IntroBanner"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "STAGE 01 // THE SACRIFICE ARENA"
+horizontal_alignment = 1
+
+[node name="IntroSubtitle" type="Label" parent="IntroBanner"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text = "PURGE 12 SACRAMENT HOSTILES // DIE NO MORE THAN 2 TIMES"
+horizontal_alignment = 1
+
+[node name="DefeatedScreen" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimOverlay" type="ColorRect" parent="DefeatedScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.015, 0.02, 0.86)
+
+[node name="CenterBox" type="VBoxContainer" parent="DefeatedScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -240.0
+offset_right = 320.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="DefeatedTitle" type="Label" parent="DefeatedScreen/CenterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.12, 0.16, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 64
+text = "DEFEATED"
+horizontal_alignment = 1
+
+[node name="DefeatedSubtitle" type="Label" parent="DefeatedScreen/CenterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.65, 0.65, 1)
+theme_override_font_sizes/font_size = 16
+text = "THE SACRAMENT HAS CLAIMED YOUR FLESH"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="DefeatedScreen/CenterBox"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="DefeatedStatsPanel" type="PanelContainer" parent="DefeatedScreen/CenterBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_dark")
+
+[node name="Margin" type="MarginContainer" parent="DefeatedScreen/CenterBox/DefeatedStatsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 14
+
+[node name="StatsVBox" type="VBoxContainer" parent="DefeatedScreen/CenterBox/DefeatedStatsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DefeatEnemiesLabel" type="Label" parent="DefeatedScreen/CenterBox/DefeatedStatsPanel/Margin/StatsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HOSTILES PURGED: 0 / 12"
+horizontal_alignment = 1
+
+[node name="DefeatDeathsLabel" type="Label" parent="DefeatedScreen/CenterBox/DefeatedStatsPanel/Margin/StatsVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.2, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+text = "DEATHS INCURRED: 3 / 3 (LIMIT EXCEEDED)"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="DefeatedScreen/CenterBox"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="DefeatedScreen/CenterBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="TryAgainButton" type="Button" parent="DefeatedScreen/CenterBox/ButtonsHBox"]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+text = "↻  TRY AGAIN"
+
+[node name="MainMenuButton" type="Button" parent="DefeatedScreen/CenterBox/ButtonsHBox"]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.96, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sec_normal")
+text = "⌂  MAIN MENU"
+
+[node name="VictoryScreen" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VictoryDimOverlay" type="ColorRect" parent="VictoryScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.05, 0.86)
+
+[node name="VictoryCenterBox" type="VBoxContainer" parent="VictoryScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -250.0
+offset_right = 360.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="VictoryTitle" type="Label" parent="VictoryScreen/VictoryCenterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 56
+text = "STAGE COMPLETED"
+horizontal_alignment = 1
+
+[node name="VictorySubtitle" type="Label" parent="VictoryScreen/VictoryCenterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "ALL SACRAMENT HOSTILES SLAIN"
+horizontal_alignment = 1
+
+[node name="RatingStarsLabel" type="Label" parent="VictoryScreen/VictoryCenterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 32
+text = "★ ★ ★"
+horizontal_alignment = 1
+
+[node name="CriteriaPanel" type="PanelContainer" parent="VictoryScreen/VictoryCenterBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_dark")
+
+[node name="Margin" type="MarginContainer" parent="VictoryScreen/VictoryCenterBox/CriteriaPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 16
+
+[node name="CriteriaVBox" type="VBoxContainer" parent="VictoryScreen/VictoryCenterBox/CriteriaPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VicCrit1Label" type="Label" parent="VictoryScreen/VictoryCenterBox/CriteriaPanel/Margin/CriteriaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "★ CRITERION 1: Clear all 12 enemies [12/12]  -  ACHIEVED"
+
+[node name="VicCrit2Label" type="Label" parent="VictoryScreen/VictoryCenterBox/CriteriaPanel/Margin/CriteriaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "★ CRITERION 2: Character died <= 1 time [Deaths: 0]  -  ACHIEVED"
+
+[node name="VicCrit3Label" type="Label" parent="VictoryScreen/VictoryCenterBox/CriteriaPanel/Margin/CriteriaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "★ CRITERION 3: Character died <= 2 times [Deaths: 0]  -  ACHIEVED"
+
+[node name="VicSpacer" type="Control" parent="VictoryScreen/VictoryCenterBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="VicButtonsHBox" type="HBoxContainer" parent="VictoryScreen/VictoryCenterBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="VicTryAgainButton" type="Button" parent="VictoryScreen/VictoryCenterBox/VicButtonsHBox"]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+text = "↻  PLAY AGAIN"
+
+[node name="VicMainMenuButton" type="Button" parent="VictoryScreen/VictoryCenterBox/VicButtonsHBox"]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.96, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_sec_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sec_normal")
+text = "⌂  MAIN MENU"

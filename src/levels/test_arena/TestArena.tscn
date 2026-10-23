@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://src/entities/enemies/TrainingDummy.tscn" id="3_dummy"]
 [ext_resource type="PackedScene" path="res://src/ui/CombatHUD.tscn" id="4_hud"]
 [ext_resource type="Shader" path="res://src/levels/test_arena/floor_tiles.gdshader" id="5_tiles"]
+[ext_resource type="Script" path="res://src/core/StageManager.gd" id="6_stage"]
 
 [sub_resource type="Environment" id="Environment_arena"]
 background_mode = 1
@@ -143,13 +144,8 @@ fov = 42.0
 script = ExtResource("2_camera")
 target = NodePath("../Player")
 
-[node name="Dummy_Passive" parent="." instance=ExtResource("3_dummy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
-is_attacker = false
-
-[node name="Dummy_Attacker" parent="." instance=ExtResource("3_dummy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3)
-is_attacker = true
-attack_interval = 3.2
+[node name="StageManager" type="Node" parent="."]
+script = ExtResource("6_stage")
+total_enemies = 12
 
 [node name="CombatHUD" parent="." instance=ExtResource("4_hud")]
