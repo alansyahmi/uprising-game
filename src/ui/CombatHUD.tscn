@@ -47,7 +47,7 @@ theme_override_constants/separation = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.7, 0.5, 1)
 theme_override_font_sizes/font_size = 14
-text = "PROTAGONIST // ELIAN [ANOMALOUS PUREBLOOD]"
+text = "PROTAGONIST // ANTOINE [THE FALCON // SEVERED SCION]"
 
 [node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/TopBar"]
 custom_minimum_size = Vector2(340, 22)
