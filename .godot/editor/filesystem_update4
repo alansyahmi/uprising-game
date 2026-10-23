@@ -1,3 +1,7 @@
+res://src/core/GlobalEvents.gd
 res://src/core/IsoCamera3D.gd
-res://src/entities/enemies/TrainingDummy.gd
 res://src/entities/player/Player.gd
+res://src/combat/Hitbox3D.gd
+res://src/combat/Hurtbox3D.gd
+res://src/core/HitStopManager.gd
+res://src/entities/enemies/TrainingDummy.gd

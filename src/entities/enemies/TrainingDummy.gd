@@ -136,6 +136,13 @@ func take_damage(amount: float, stagger: float, knockback: float, from_pos: Vect
 	# Flash red/white
 	_flash_color(Color(1.0, 0.3, 0.3))
 	
+	# Dynamic Squash & Stretch physical reaction
+	if model_holder:
+		var tween = create_tween()
+		tween.tween_property(model_holder, "scale", Vector3(1.28, 0.72, 1.28), 0.05).set_trans(Tween.TRANS_QUAD)
+		tween.tween_property(model_holder, "scale", Vector3(0.92, 1.14, 0.92), 0.08).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(model_holder, "scale", Vector3.ONE, 0.12).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	
 	if current_health <= 0.0:
 		_die_and_respawn()
 

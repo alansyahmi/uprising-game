@@ -5,8 +5,10 @@ extends Area3D
 @export var stagger_damage: float = 15.0
 @export var knockback_force: float = 5.0
 @export var is_parryable: bool = true
+@export var is_heavy: bool = false
 
 var attacker: Node3D
+var combo_index: int = 0
 var hit_targets: Array[Node3D] = []
 
 func _ready() -> void:

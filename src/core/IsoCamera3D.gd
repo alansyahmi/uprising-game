@@ -8,24 +8,34 @@ enum CameraProfile {
 	CUSTOM            ## Custom manual offset & FOV
 }
 
-@export var profile: CameraProfile = CameraProfile.HADES_ISOMETRIC:
+@export var profile: CameraProfile = CameraProfile.MLBB_MOBA:
 	set(val):
 		profile = val
 		_apply_profile_settings(profile, false)
 
+@export_group("Target Tracking & Mobile Lookahead")
 @export var target: Node3D
 @export var follow_speed: float = 8.5
+## Velocity-based lookahead lead in the direction of movement (mobile friendly, no mouse needed)
+@export var movement_lead_factor: float = 0.22
+@export var max_movement_lead: float = 2.2
+@export var lead_smooth_speed: float = 4.5
+
+@export_group("Mouse Lead (Optional)")
+## When false, camera movement ignores mouse and tracks movement/velocity (mobile friendly)
+@export var enable_mouse_lead: bool = false
 @export var mouse_lead_factor: float = 0.15
 @export var max_mouse_lead: float = 2.5
 
 # Active target values (interpolated smoothly)
-@export var camera_offset: Vector3 = Vector3(-14.0, 17.0, 14.0)
-@export var focus_offset: Vector3 = Vector3(0.0, 0.9, 0.0)
+@export var camera_offset: Vector3 = Vector3(0.0, 13.2, 8.5)
+@export var focus_offset: Vector3 = Vector3(0.0, 0.9, -1.2)
 @export var target_fov: float = 38.0
 
 # Interpolation state for smooth transitions
 var current_offset: Vector3
 var current_focus: Vector3
+var _current_lead: Vector3 = Vector3.ZERO
 
 # Screen shake trauma
 var trauma: float = 0.0
@@ -70,7 +80,7 @@ func _check_automated_capture() -> void:
 			return
 
 func _run_capture_sequence() -> void:
-	set_profile(CameraProfile.HADES_ISOMETRIC, false)
+	set_profile(profile, false)
 	current_offset = camera_offset
 	current_focus = focus_offset
 	fov = target_fov
@@ -144,26 +154,45 @@ func _process(delta: float) -> void:
 	current_focus = current_focus.lerp(focus_offset, 6.0 * delta)
 	fov = lerpf(fov, target_fov, 6.0 * delta)
 	
-	# Compute mouse lead on the ground plane
-	var lead_offset := Vector3.ZERO
-	var mouse_pos := get_viewport().get_mouse_position()
-	var ray_origin := project_ray_origin(mouse_pos)
-	var ray_dir := project_ray_normal(mouse_pos)
-	var ground_plane := Plane(Vector3.UP, target.global_position.y)
-	var ground_hit = ground_plane.intersects_ray(ray_origin, ray_dir)
+	# Compute lead offset
+	var target_lead := Vector3.ZERO
 	
-	if ground_hit:
-		var diff = ground_hit - target.global_position
-		lead_offset = diff * mouse_lead_factor
-		if lead_offset.length() > max_mouse_lead:
-			lead_offset = lead_offset.normalized() * max_mouse_lead
+	# 1. Mobile-friendly movement / velocity lookahead
+	var move_vec := Vector3.ZERO
+	if target is CharacterBody3D:
+		move_vec = Vector3(target.velocity.x, 0.0, target.velocity.z)
+	elif "input_dir" in target and target.input_dir.length() > 0.05:
+		move_vec = target.input_dir * 8.0
+		
+	if move_vec.length() > 0.2:
+		target_lead = move_vec * movement_lead_factor
+		if target_lead.length() > max_movement_lead:
+			target_lead = target_lead.normalized() * max_movement_lead
+	
+	# 2. Mouse lead (only if explicitly enabled)
+	if enable_mouse_lead:
+		var mouse_pos := get_viewport().get_mouse_position()
+		var ray_origin := project_ray_origin(mouse_pos)
+		var ray_dir := project_ray_normal(mouse_pos)
+		var ground_plane := Plane(Vector3.UP, target.global_position.y)
+		var ground_hit = ground_plane.intersects_ray(ray_origin, ray_dir)
+		if ground_hit:
+			var mouse_diff = (ground_hit - target.global_position) * mouse_lead_factor
+			if mouse_diff.length() > max_mouse_lead:
+				mouse_diff = mouse_diff.normalized() * max_mouse_lead
+			target_lead += mouse_diff
+			if target_lead.length() > max_movement_lead:
+				target_lead = target_lead.normalized() * max_movement_lead
+
+	# Smoothly interpolate lead offset (glides ahead in movement direction)
+	_current_lead = _current_lead.lerp(target_lead, lead_smooth_speed * delta)
 	
 	# Smoothly position camera
-	var desired_pos = target.global_position + current_offset + lead_offset
+	var desired_pos = target.global_position + current_offset + _current_lead
 	global_position = global_position.lerp(desired_pos, follow_speed * delta)
 	
 	# Keep camera focused smoothly on target + focus offset + slight lookahead
-	var look_target = target.global_position + current_focus + (lead_offset * 0.3)
+	var look_target = target.global_position + current_focus + (_current_lead * 0.35)
 	look_at(look_target, Vector3.UP)
 	
 	# Process screen shake trauma

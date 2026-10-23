@@ -8,6 +8,12 @@ var _is_time_dilated: bool = false
 var _active_tween: Tween
 
 func trigger_hit_stop(duration_sec: float = 0.06) -> void:
+	trigger_scaled_hitstop(duration_sec, 0.0)
+
+func trigger_scaled_hitstop(duration_sec: float, trauma: float = 0.0) -> void:
+	if trauma > 0.0:
+		screen_shake_requested.emit(trauma)
+
 	if _is_time_dilated:
 		return
 	
